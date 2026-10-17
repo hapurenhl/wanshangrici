@@ -66,3 +66,6 @@ npm run release   # 发布包
 
 ✅ 允许：个人学习、研究、非营利使用、修改与再分发
 ❌ 禁止：任何商业用途
+
+## 赞助
+- 爱发电：https://ifdian.net/a/hapuren
