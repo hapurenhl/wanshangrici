@@ -1,0 +1,104 @@
+<template>
+  <div class="page">
+    <text class="title">{{ unitTitle }}</text>
+    <list class="list">
+      <list-item class="cell" type="lesson" for="{{ lessons }}" onclick="onLesson($idx)">
+        <div class="cell-bg">
+          <div class="cell-inner">
+            <text class="cell-title">{{ $item.title }}</text>
+            <text class="cell-count">{{ $item.count }} 词</text>
+          </div>
+        </div>
+      </list-item>
+    </list>
+  </div>
+</template>
+
+<style>
+.page {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+}
+.title {
+  margin-top: 56px;
+  margin-bottom: 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.list {
+  flex: 1;
+  width: 466px;
+}
+.cell {
+  width: 466px;
+  height: 84px;
+  margin-bottom: 8px;
+  padding: 0 40px;
+}
+.cell-bg {
+  flex: 1;
+  border-radius: 20px;
+  background-color: #1c1c1e;
+}
+.cell-inner {
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.cell-title {
+  font-size: 26px;
+  color: #ffffff;
+  max-width: 340px;
+  text-overflow: ellipsis;
+  lines: 1;
+}
+.cell-count {
+  font-size: 20px;
+  color: #8e8e93;
+  margin-top: 4px;
+}
+</style>
+
+<script>
+import router from '@system.router'
+import META from '../../common/scripts/meta.js'
+
+export default {
+  public: {
+    unit: '0'
+  },
+
+  private: {
+    unitTitle: '',
+    lessons: []
+  },
+
+  onInit() {
+    const u = parseInt(this.unit) || 0
+    // 课列表页只需要标题与词数，引 meta.js（4KB），不引词库
+    const unitMeta = META[u]
+    if (unitMeta) {
+      this.unitTitle = unitMeta.t
+      const list = []
+      for (let i = 0; i < unitMeta.l.length; i++) {
+        const lm = unitMeta.l[i]
+        list.push({ title: lm.t, count: lm.c })
+      }
+      this.lessons = list
+    }
+  },
+
+  onLesson(index) {
+    // 先进入本课单词列表，由用户选择从第几个单词开始
+    router.push({
+      uri: '/pages/words',
+      params: { unit: parseInt(this.unit) || 0, lesson: index }
+    })
+  }
+}
+</script>

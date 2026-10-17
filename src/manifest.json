@@ -1,0 +1,54 @@
+{
+  "package": "com.hapuren.biaozhiwords",
+  "name": "腕上日词",
+  "icon": "/common/images/icon.png",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minAPILevel": 1,
+  "deviceTypeList": ["watch"],
+  "features": [
+    { "name": "system.router" },
+    { "name": "system.storage" },
+    { "name": "system.prompt" }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 466
+  },
+  "display": {
+    "backgroundColor": "#000000"
+  },
+  "router": {
+    "entry": "pages/index",
+    "pages": {
+      "pages/index": {
+        "component": "index",
+        "path": "/"
+      },
+      "pages/word": {
+        "component": "word",
+        "path": "/pages/word"
+      },
+      "pages/unit": {
+        "component": "unit",
+        "path": "/pages/unit"
+      },
+      "pages/lesson": {
+        "component": "lesson",
+        "path": "/pages/lesson"
+      },
+      "pages/words": {
+        "component": "words",
+        "path": "/pages/words"
+      },
+      "pages/favorite": {
+        "component": "favorite",
+        "path": "/pages/favorite"
+      },
+      "pages/about": {
+        "component": "about",
+        "path": "/pages/about"
+      }
+    }
+  }
+}

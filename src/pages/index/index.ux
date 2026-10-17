@@ -1,0 +1,76 @@
+<template>
+  <div class="page">
+    <text class="title">腕上日词</text>
+
+    <div class="menu">
+      <div class="menu-item" for="{{ menus }}" onclick="onMenu($item)">
+        <text class="menu-text">{{ $item.name }}</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+.page {
+  flex-direction: column;
+  align-items: center;
+  width: 466px;
+  height: 100%;
+  background-color: #000000;
+}
+.title {
+  margin-top: 38px;
+  margin-bottom: 14px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.menu {
+  flex-direction: column;
+  align-items: center;
+  width: 466px;
+}
+.menu-item {
+  width: 300px;
+  height: 60px;
+  margin-bottom: 10px;
+  border-radius: 30px;
+  background-color: #1c1c1e;
+  justify-content: center;
+  align-items: center;
+}
+.menu-text {
+  font-size: 28px;
+  color: #ffffff;
+}
+</style>
+
+<script>
+import router from '@system.router'
+
+export default {
+  private: {
+    menus: [
+      { id: 'start', name: '开始' },
+      { id: 'select', name: '选择' },
+      { id: 'fav', name: '收藏' },
+      { id: 'dev', name: '开发人员' },
+      { id: 'exit', name: '退出' }
+    ]
+  },
+
+  onMenu(item) {
+    if (item.id === 'start') {
+      router.push({ uri: '/pages/word', params: { unit: 0, lesson: 0, mode: 'start' } })
+    } else if (item.id === 'select') {
+      router.push({ uri: '/pages/unit' })
+    } else if (item.id === 'fav') {
+      router.push({ uri: '/pages/favorite' })
+    } else if (item.id === 'dev') {
+      router.push({ uri: '/pages/about' })
+    } else if (item.id === 'exit') {
+      this.$app.exit()
+    }
+  }
+}
+</script>

@@ -1,0 +1,75 @@
+<template>
+  <div class="page">
+    <text class="title">选择单元</text>
+    <list class="list">
+      <list-item class="cell" type="unit" for="{{ units }}" onclick="onUnit($idx)">
+        <div class="cell-bg">
+          <text class="cell-text">{{ $item.title }}</text>
+        </div>
+      </list-item>
+    </list>
+  </div>
+</template>
+
+<style>
+.page {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+}
+.title {
+  margin-top: 56px;
+  margin-bottom: 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.list {
+  flex: 1;
+  width: 466px;
+}
+.cell {
+  width: 466px;
+  height: 72px;
+  margin-bottom: 8px;
+  padding: 0 48px;
+  justify-content: center;
+}
+.cell-bg {
+  flex: 1;
+  border-radius: 36px;
+  background-color: #1c1c1e;
+  justify-content: center;
+  align-items: center;
+}
+.cell-text {
+  font-size: 28px;
+  color: #ffffff;
+}
+</style>
+
+<script>
+import router from '@system.router'
+import META from '../../common/scripts/meta.js'
+
+export default {
+  private: {
+    units: []
+  },
+
+  onInit() {
+    // 单元页只需要标题，引 meta.js（4KB），不引词库
+    const list = []
+    for (let i = 0; i < META.length; i++) {
+      list.push({ title: META[i].t })
+    }
+    this.units = list
+  },
+
+  onUnit(index) {
+    router.push({ uri: '/pages/lesson', params: { unit: index } })
+  }
+}
+</script>

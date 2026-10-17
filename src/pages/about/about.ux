@@ -1,0 +1,81 @@
+<template>
+  <div class="page">
+    <text class="title">开发人员</text>
+
+    <div class="body">
+      <div class="row">
+        <text class="product">腕上日词 v{{ version }}</text>
+      </div>
+      <div class="row">
+        <text class="label">开发者</text>
+        <text class="value">@哈葡人</text>
+      </div>
+      <div class="row">
+        <text class="label">开源地址</text>
+        <text class="value value-url">https://github.com/hapurenhl/wanshangrici</text>
+      </div>
+      <div class="row">
+        <text class="label">官网</text>
+        <text class="value value-url">wsrc.hapuren.cn</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+.page {
+  flex-direction: column;
+  align-items: center;
+  width: 466px;
+  height: 100%;
+  background-color: #000000;
+}
+.title {
+  margin-top: 40px;
+  margin-bottom: 10px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.body {
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  width: 466px;
+  padding: 0 44px;
+}
+.row {
+  flex-direction: column;
+  align-items: center;
+  width: 378px;
+  margin-bottom: 16px;
+}
+.product {
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffd60a;
+}
+.label {
+  font-size: 18px;
+  color: #8e8e93;
+  margin-bottom: 2px;
+}
+.value {
+  font-size: 22px;
+  color: #ffffff;
+  text-align: center;
+}
+.value-url {
+  font-size: 16px;
+  color: #64d2ff;
+  lines: 2;
+}
+</style>
+
+<script>
+export default {
+  private: {
+    version: '1.0.0'
+  }
+}
+</script>

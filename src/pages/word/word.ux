@@ -1,0 +1,265 @@
+<template>
+  <div class="page">
+    <div class="tap-area" onclick="next">
+      <text class="lesson">{{ lessonTitle }}</text>
+      <div class="center">
+        <text if="{{ hasKanji }}" class="{{ kanaCls }}">{{ kanaText }}</text>
+        <text class="{{ mainCls }}">{{ mainText }}</text>
+        <text class="{{ meanCls }}">{{ meaningText }}</text>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <text class="progress">{{ idx + 1 }} / {{ total }}</text>
+      <div class="star-box" onclick="onStar">
+        <text if="{{ fav }}" class="star star-on">★</text>
+        <text else class="star">☆</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+.page {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+}
+.tap-area {
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+.lesson {
+  margin-top: 44px;
+  font-size: 20px;
+  color: #8e8e93;
+  max-width: 380px;
+  text-overflow: ellipsis;
+  lines: 1;
+}
+.center {
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 40px;
+}
+.kana {
+  font-size: 26px;
+  color: #ffd60a;
+  margin-bottom: 6px;
+  text-align: center;
+}
+.kana-long {
+  font-size: 20px;
+  lines: 2;
+}
+.kanji {
+  font-size: 52px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+}
+.kanji-md {
+  font-size: 40px;
+}
+.kanji-long {
+  font-size: 28px;
+  lines: 3;
+}
+.meaning {
+  margin-top: 18px;
+  font-size: 28px;
+  color: #c7c7cc;
+  text-align: center;
+}
+.meaning-md {
+  font-size: 24px;
+  lines: 3;
+}
+.meaning-long {
+  font-size: 22px;
+  lines: 4;
+}
+.bottom {
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.progress {
+  font-size: 20px;
+  color: #8e8e93;
+  margin-bottom: 8px;
+}
+.star-box {
+  width: 88px;
+  height: 88px;
+  border-radius: 44px;
+  justify-content: center;
+  align-items: center;
+}
+.star {
+  font-size: 52px;
+  color: #ffffff;
+}
+.star-on {
+  color: #ffd60a;
+}
+</style>
+
+<script>
+import router from '@system.router'
+import prompt from '@system.prompt'
+import { getLesson, wordId, UNIT_COUNT } from '../../common/scripts/data.js'
+import { loadFavs, isFav, toggleFav } from '../../common/scripts/fav.js'
+
+const LESSON_COUNT = 4
+// 词卡数组下标：0=kana 1=kanji 2=pos 3=meaning
+
+export default {
+  // 路由传入参数必须在 public 中声明才能被覆盖
+  // mode: start=从“开始”进入，课末自动衔接下一课；select/fav=课末即止
+  public: {
+    unit: '0',
+    lesson: '0',
+    index: '0',
+    mode: ''
+  },
+
+  private: {
+    lessonTitle: '',
+    idx: 0,
+    total: 0,
+    kanaText: '',
+    hasKanji: false,
+    mainText: '',
+    meaningText: '',
+    fav: false,
+    mainCls: 'kanji',
+    kanaCls: 'kana',
+    meanCls: 'meaning'
+  },
+
+  onInit() {
+    // 非 UI 状态挂实例普通字段，不占 viewModel
+    this.u = parseInt(this.unit) || 0
+    this.l = parseInt(this.lesson) || 0
+    this.wordList = []
+    const start = parseInt(this.index) || 0
+    const that = this
+
+    // 收藏只在进页面时读盘一次，之后翻词全程走内存
+    loadFavs(function () {
+      if (!that.$valid) return
+      if (!that.loadLesson(that.u, that.l, start)) {
+        prompt.showToast({ message: '暂无单词，敬请期待' })
+        that.backTimer = setTimeout(function () { router.back() }, 800)
+      }
+    })
+  },
+
+  onDestroy() {
+    if (this.backTimer) {
+      clearTimeout(this.backTimer)
+      this.backTimer = null
+    }
+  },
+
+  // 载入某一课并渲染起始词；课不存在/为空返回 false
+  loadLesson(u, l, start) {
+    // 按课懒解析：只解析本课 ~3KB，几毫秒完成
+    const ld = getLesson(u, l)
+    if (!ld || !ld.words || ld.words.length === 0) return false
+    this.u = u
+    this.l = l
+    this.wordList = ld.words
+    this.lessonTitle = ld.title
+    this.total = ld.words.length
+    this.idx = start > 0 && start < this.total ? start : 0
+    this.renderWord()
+    return true
+  },
+
+  // 纯渲染：只更新文本与内存收藏标记，无任何 I/O
+  renderWord() {
+    const w = this.wordList[this.idx]
+    const kana = w[0]
+    const kanji = w[1]
+    const pos = w[2]
+    const meaning = w[3]
+    this.hasKanji = kanji !== ''
+    this.kanaText = kana
+    this.mainText = kanji ? kanji : kana
+    this.meaningText = (pos ? '[' + pos + '] ' : '') + meaning
+    this.fav = isFav(wordId(this.u, this.l, this.idx))
+
+    // 按文本长度分级字号，长句自动换行，避免溢出圆屏
+    const ml = this.mainText.length
+    this.mainCls = ml > 11 ? 'kanji kanji-long' : (ml > 7 ? 'kanji kanji-md' : 'kanji')
+    this.kanaCls = kana.length > 14 ? 'kana kana-long' : 'kana'
+    const sl = this.meaningText.length
+    this.meanCls = sl > 20 ? 'meaning meaning-long' : (sl > 10 ? 'meaning meaning-md' : 'meaning')
+  },
+
+  next() {
+    if (this.wordList.length === 0) return
+    if (this.idx < this.total - 1) {
+      this.idx = this.idx + 1
+      this.renderWord()
+      return
+    }
+    // 只有从“开始”进入才一课接一课；选择/收藏入口课末即止
+    if (this.mode === 'start') {
+      if (this.gotoNextLesson()) return
+      prompt.showToast({ message: '全部学完啦' })
+      router.back()
+      return
+    }
+    prompt.showToast({ message: '本课学完啦' })
+    router.back()
+  },
+
+  // 从当前课的下一课开始顺序查找有单词的课（自动跳过空占位课）
+  gotoNextLesson() {
+    let u = this.u
+    let l = this.l + 1
+    while (u < UNIT_COUNT) {
+      while (l < LESSON_COUNT) {
+        const ld = getLesson(u, l)
+        if (ld && ld.words && ld.words.length > 0) {
+          return this.loadLesson(u, l, 0)
+        }
+        l++
+      }
+      u++
+      l = 0
+    }
+    return false
+  },
+
+  onStar() {
+    if (this.wordList.length === 0) return
+    const w = this.wordList[this.idx]
+    const that = this
+    // 收藏存储结构保持对象格式不变，与已存盘的收藏数据兼容
+    toggleFav({
+      id: wordId(this.u, this.l, this.idx),
+      kana: w[0],
+      kanji: w[1],
+      pos: w[2],
+      meaning: w[3],
+      unit: this.u,
+      lesson: this.l,
+      index: this.idx
+    }, function (f) {
+      that.fav = f
+      prompt.showToast({ message: f ? '已收藏' : '已取消收藏' })
+    })
+  }
+}
+</script>

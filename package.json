@@ -1,0 +1,14 @@
+{
+  "name": "biaozhi-words",
+  "version": "1.0.0",
+  "description": "腕上日词 - 日语单词学习快应用",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "aiot build",
+    "release": "aiot release"
+  },
+  "devDependencies": {
+    "aiot-toolkit": "^2.0.5"
+  }
+}

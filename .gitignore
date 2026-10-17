@@ -1,0 +1,19 @@
+# 依赖（体积大，npm install 可恢复）
+node_modules/
+
+# 构建产物（aiot build/release 生成）
+build/
+dist/
+
+# 编辑器配置
+.vscode/
+
+# 日志与系统文件
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+*.tmp
+*.bak

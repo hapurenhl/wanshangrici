@@ -1,0 +1,149 @@
+<template>
+  <div class="page">
+    <text class="title">{{ lessonTitle }}</text>
+
+    <div if="{{ rows.length === 0 }}" class="empty">
+      <text class="empty-text">本课暂无单词，敬请期待</text>
+    </div>
+
+    <list else class="list">
+      <list-item class="cell" type="row" for="{{ rows }}" onclick="onPick($item)">
+        <div class="cell-bg">
+          <text class="cell-no">{{ $item.no }}</text>
+          <div class="cell-text">
+            <text class="cell-main">{{ $item.main }}</text>
+            <text class="cell-mean">{{ $item.meaning }}</text>
+          </div>
+        </div>
+      </list-item>
+    </list>
+  </div>
+</template>
+
+<style>
+.page {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+}
+.title {
+  margin-top: 40px;
+  margin-bottom: 14px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
+  max-width: 380px;
+  text-overflow: ellipsis;
+  lines: 1;
+}
+.empty {
+  flex: 1;
+  width: 466px;
+  justify-content: center;
+  align-items: center;
+}
+.empty-text {
+  font-size: 24px;
+  color: #8e8e93;
+}
+.list {
+  flex: 1;
+  width: 466px;
+}
+.cell {
+  width: 466px;
+  height: 66px;
+  margin-bottom: 6px;
+  padding: 0 36px;
+}
+.cell-bg {
+  flex: 1;
+  border-radius: 16px;
+  background-color: #1c1c1e;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 14px;
+}
+.cell-no {
+  width: 44px;
+  font-size: 20px;
+  color: #8e8e93;
+}
+.cell-text {
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+.cell-main {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  max-width: 320px;
+  text-overflow: ellipsis;
+  lines: 1;
+}
+.cell-mean {
+  font-size: 18px;
+  color: #c7c7cc;
+  margin-top: 2px;
+  max-width: 320px;
+  text-overflow: ellipsis;
+  lines: 1;
+}
+</style>
+
+<script>
+import router from '@system.router'
+import { getLesson } from '../../common/scripts/data.js'
+
+// 词卡数组下标：0=kana 1=kanji 2=pos 3=meaning
+export default {
+  public: {
+    unit: '0',
+    lesson: '0'
+  },
+
+  private: {
+    lessonTitle: '',
+    rows: []
+  },
+
+  onInit() {
+    const u = parseInt(this.unit) || 0
+    const l = parseInt(this.lesson) || 0
+    // 只解析本课词卡（~3KB 几毫秒），不做全量解析
+    const ld = getLesson(u, l)
+    if (!ld) return
+
+    this.lessonTitle = ld.title
+    // 预计算展示字段，保证 list-item 内部 DOM 结构一致
+    const rows = []
+    const ws = ld.words || []
+    for (let i = 0; i < ws.length; i++) {
+      const w = ws[i]
+      rows.push({
+        no: i + 1,
+        main: w[1] ? w[1] : w[0],
+        meaning: w[3],
+        index: i
+      })
+    }
+    this.rows = rows
+  },
+
+  // 点第 N 个，就从第 N 个开始学到本课最后
+  onPick(item) {
+    router.push({
+      uri: '/pages/word',
+      params: {
+        unit: parseInt(this.unit) || 0,
+        lesson: parseInt(this.lesson) || 0,
+        index: item.index,
+        mode: 'select'
+      }
+    })
+  }
+}
+</script>
