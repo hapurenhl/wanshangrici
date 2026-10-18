@@ -17,3 +17,9 @@ desktop.ini
 # 临时文件
 *.tmp
 *.bak
+# 忽略根目录下的 manifest_v2.json
+/manifest_v2.json
+
+# 忽略根目录下的 media 和 downloads 目录（含其中所有内容）
+/media/
+/downloads/
