@@ -1,0 +1,49 @@
+{
+  "item": {
+    "id": "com.hapuren.biaozhiwords",
+    "restype": "quick_app",
+    "name": "腕上日词 —— 好用的随时背日语单词神器",
+    "description": "一个基于Vela的背日语单词神器",
+    "preview": [
+      "media/xiaomi_s4-2026-10-17-23-30-46.png"
+    ],
+    "icon": "media/cropped_circle_image_Waifu2x_2x.png",
+    "cover": "media/封面3_compressed.png",
+    "author": [
+      {
+        "name": "hapuren",
+        "bindABAccount": true
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "官网",
+      "url": "https://wsrc.hapuren.cn/",
+      "icon": "globe"
+    }
+  ],
+  "downloads": {
+    "xmws5": {
+      "version": "1.0.0",
+      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
+      "versionCode": 1
+    },
+    "xmws4": {
+      "version": "1.0.0",
+      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
+      "versionCode": 1
+    },
+    "xmws541": {
+      "version": "1.0.0",
+      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
+      "versionCode": 1
+    },
+    "xmws441": {
+      "version": "1.0.0",
+      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
+      "versionCode": 1
+    }
+  },
+  "ext": {}
+}
