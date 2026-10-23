@@ -26,23 +26,23 @@
   "downloads": {
     "xmws5": {
       "version": "1.0.0",
-      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
-      "versionCode": 1
+      "file_name": "downloads/com.hapuren.biaozhiwords.release.1.0.0.rpk",
+      "versionCode": 2
     },
     "xmws4": {
       "version": "1.0.0",
-      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
-      "versionCode": 1
+      "file_name": "downloads/com.hapuren.biaozhiwords.release.1.0.0.rpk",
+      "versionCode": 2
     },
     "xmws541": {
       "version": "1.0.0",
-      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
-      "versionCode": 1
+      "file_name": "downloads/com.hapuren.biaozhiwords.release.1.0.0.rpk",
+      "versionCode": 2
     },
     "xmws441": {
       "version": "1.0.0",
-      "file_name": "downloads/com.hapuren.biaozhiwords.1.0.0.rpk",
-      "versionCode": 1
+      "file_name": "downloads/com.hapuren.biaozhiwords.release.1.0.0.rpk",
+      "versionCode": 2
     }
   },
   "ext": {}
